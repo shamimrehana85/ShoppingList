@@ -8,13 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,32 +40,61 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
-    val shoppingItems = listOf("Apples","Bananas","Milk","Bread","Eggs", "Coffee")
+    // Provide values for name, id, and price for each item
+    val shoppingItems = listOf(
+        ShoppingItem("Apples", 1, 2.99f),
+        ShoppingItem("Bananas", 2, 1.49f),
+        ShoppingItem("Milk", 3, 3.50f),
+        ShoppingItem("Bread", 4, 2.50f),
+        ShoppingItem("Eggs", 5, 4.00f),
+        ShoppingItem("Coffee", 6, 8.99f)
+    )
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
-    ){
-        // Main Header
-        Text (text = "Welcome to Group 6 Shopping App")
-        Spacer( modifier = Modifier.height(16.dp))
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        // Main Header
+        Text(
+            text = "Welcome to Group 6 Shopping App",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(16.dp))
 
-        items(shoppingItems) { item ->
-            Card(
-                modifier = modifier.fillMaxSize(), shape = RoundedCornerShape(12.dp)
-            ) {
-                Text(
-                    text = item,
-                    modifier = modifier.padding(16.dp)
-                )
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(shoppingItems) { item ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = item.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Price: $${item.price}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
             }
         }
     }
-    }
 }
+
+// Data class defined at the bottom (valid in Kotlin!)
+data class ShoppingItem(
+    val name: String,
+    val id: Int,
+    val price: Float
+)
 
 @Preview(showBackground = true)
 @Composable
